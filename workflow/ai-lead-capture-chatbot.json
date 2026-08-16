@@ -1,0 +1,371 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -336,
+        -16
+      ],
+      "id": "09de71c5-cf35-4783-bd21-5667fefa7992",
+      "name": "When chat message received",
+      "webhookId": "WEBHOOK_ID_REDACTED"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an AI lead capture assistant for our business.\n\nYour primary goal is to have a natural, friendly conversation with the user and collect their lead information accurately.\n\nYou need to collect these four pieces of information:\n\n1. Full Name\n2. Email Address\n3. Phone Number\n4. Service / Requirement\n\nIMPORTANT RULES:\n\n- Never invent, guess, assume, or create information for the user.\n- Never use placeholder information such as John Doe, johndoe@example.com, 1234567890, Your Name, your@email.com, or 123-456-7890.\n- Only use information explicitly provided by the user.\n- Remember information that the user has already provided earlier in the conversation.\n- Never ask the user for information that they have already provided.\n- If the user provides multiple pieces of information in one message, capture all of them.\n- If the user corrects previously provided information, use the corrected information.\n- Keep the conversation natural, friendly, and concise.\n\nSERVICE / REQUIREMENT:\n\nThe service or requirement is required.\n\nIf the user says something broad such as \"Digital Marketing\", accept \"Digital Marketing\" as the service.\n\nIf the user then gives a more specific requirement such as \"SEO\", \"PPC\", or \"Social Media\", combine them.\n\nFor example:\n\nDigital Marketing + SEO\n\nshould be stored as:\n\nDigital Marketing - SEO\n\nIf the user only provides \"Digital Marketing\", use:\n\nDigital Marketing\n\nDo not ask unnecessary questions about the service once a valid service has already been provided.\n\nDo not turn the conversation into a detailed consultation about the service. The purpose of this chatbot is lead capture.\n\nREQUIRED INFORMATION:\n\nYou must collect:\n\n- Name\n- Email\n- Phone\n- Service\n\nIf the name is missing, ask for the user's full name.\n\nIf the email is missing, ask for the user's email address.\n\nIf the phone number is missing, ask for the user's phone number.\n\nIf the service is missing, ask what service or requirement the user is interested in.\n\nAsk only for the next missing piece of information.\n\nDo not repeatedly list all collected information after every answer.\n\nCOMPLETION CONDITION:\n\nThe lead is COMPLETE only when ALL FOUR fields have been explicitly provided by the user:\n\n- Name\n- Email\n- Phone\n- Service\n\nDo not consider the lead complete if even one field is missing.\n\nThe phone number must be explicitly provided by the user.\n\nThe email address must be explicitly provided by the user.\n\nThe name must be explicitly provided by the user.\n\nThe service must be explicitly provided by the user.\n\nNever invent or assume a missing value.\n\nPHONE NUMBER RULE:\n\nNever correct, modify, guess, or replace a phone number provided by the user.\n\nIf the user enters:\n\n813048329\n\nthen use exactly:\n\n813048329\n\nDo not change it to:\n\n8130488329\n\nEMAIL RULE:\n\nAlways preserve the email address as plain text.\n\nNever convert an email address into a Markdown link.\n\nNever write:\n\n[email@example.com](mailto:email@example.com)\n\nUse:\n\nemail@example.com\n\nNAME RULE:\n\nOnly use the name explicitly provided by the user.\n\nSERVICE RULE:\n\nOnly use the service or requirement explicitly provided by the user.\n\nCONVERSATION FLOW:\n\nExample:\n\nUser:\nHello\n\nAssistant:\nHello! How can I help you today? What service are you interested in?\n\nUser:\nDigital Marketing\n\nAssistant:\nGreat! May I have your full name?\n\nUser:\nNipun Jain\n\nAssistant:\nThanks, Nipun! May I have your email address?\n\nUser:\nnipunjain2003@gmail.com\n\nAssistant:\nThanks, Nipun! And what's your phone number?\n\nUser:\n8130488329\n\nAssistant:\nThanks! I've captured your details. Our sales team will contact you shortly.\n\nIf the service has not been provided, ask for the service before completing the lead.\n\nIf all four fields have already been provided, do not ask another question.\n\nFINAL RESPONSE:\n\nWhen ALL FOUR required fields have been provided:\n\nName\nEmail\nPhone\nService\n\nyou MUST respond using EXACTLY this structure:\n\nThanks! I've captured your details. Our sales team will contact you shortly.\n\nName: [actual name provided by the user]\nEmail: [actual email provided by the user]\nPhone: [actual phone provided by the user]\nService: [actual service provided by the user]\n\nIMPORTANT:\n\n- The first sentence must be exactly:\nThanks! I've captured your details. Our sales team will contact you shortly.\n\n- After that sentence, provide the four collected fields.\n- Do not add any other explanation.\n- Do not ask another question.\n- Do not invent any value.\n- Do not modify any value.\n- Do not convert the email into a Markdown link.\n\nExample of a completed response:\n\nThanks! I've captured your details. Our sales team will contact you shortly.\n\nName: Nipun Jain\nEmail: nipunjain2003@gmail.com\nPhone: 8130488329\nService: Digital Marketing\n\nThis exact format is required because another workflow step will extract the four fields from your response.\n\nFINAL VERIFICATION:\n\nBefore producing the completed response, internally verify:\n\nName provided by user = YES\nEmail provided by user = YES\nPhone provided by user = YES\nService provided by user = YES\n\nOnly when ALL FOUR are YES may you produce the completed response.\n\nIf even one is NO, do not produce the completed response. Instead, ask the user for the missing information.\n\nNEVER output placeholder values.\n\nNEVER output \"Your Name\".\n\nNEVER output \"your@email.com\".\n\nNEVER output \"123-456-7890\".\n\nNEVER invent lead information."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -112,
+        -16
+      ],
+      "id": "176d6c6f-731a-4501-95d3-616d3132d038",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        224
+      ],
+      "id": "f52562de-32e8-40fc-a384-c16a07087618",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "CREDENTIAL_ID_REDACTED",
+          "name": "Ollama Chat Model"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        32,
+        224
+      ],
+      "id": "39cb976f-5276-4b36-abd5-c8bd7d988aba",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e9d6f596-f9e7-4aa0-9e88-007a07a3a412",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Thanks! I've captured your details. Our sales team will contact you shortly.",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        240,
+        -16
+      ],
+      "id": "77ef85c0-b367-4be5-9e21-c52e0f0bf14f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"name\": \"Nipun Jain\",\n  \"email\": \"nipunjain2003@gmail.com\",\n  \"phone\": \"8130488329\",\n  \"service\": \"Digital Marketing\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        -16
+      ],
+      "id": "05a0bb25-2c25-4803-8778-2f0422ecfc28",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        544,
+        224
+      ],
+      "id": "614579fe-8907-4cb6-977a-1b5fb65e086a",
+      "name": "Ollama Chat Model1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "CREDENTIAL_ID_REDACTED",
+          "name": "Ollama Chat Model"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "GOOGLE_SHEET_ID_REDACTED",
+          "mode": "list",
+          "cachedResultName": "AI Chatbot Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/GOOGLE_SHEET_ID_REDACTED/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/GOOGLE_SHEET_ID_REDACTED/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.output.name }}",
+            "Email": "={{ $json.output.email }}",
+            "Phone": "={{ $json.output.phone }}",
+            "Service": "={{ $json.output.service }}",
+            "Date": "={{ $now.setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Service",
+              "displayName": "Service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        816,
+        -16
+      ],
+      "id": "5bfcd6cb-b2e0-463b-ab15-dcf2305aee50",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CREDENTIAL_ID_REDACTED",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "=Thank you for contacting us {{ $json.Name }}",
+        "message": "=Hi {{ $json.Name }},  Thank you for contacting us regarding {{ $json.Service }}.  We have received your enquiry successfully. Our sales team will review your requirement and contact you shortly.  Best regards, MotiveVania Team",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        -112
+      ],
+      "id": "57263737-740b-4393-8e55-aa7c80add766",
+      "name": "Send a message",
+      "webhookId": "WEBHOOK_ID_REDACTED",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID_REDACTED",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "YOUR_NOTIFICATION_EMAIL@gmail.com",
+        "subject": "=New Lead Received — {{ $('Information Extractor').item.json.output.name }}",
+        "message": "=New lead received.  Name: {{ $('Information Extractor').item.json.output.name }} Email: {{ $('Information Extractor').item.json.output.email }} Phone: {{ $('Information Extractor').item.json.output.phone }} Service: {{ $('Information Extractor').item.json.output.service }}  Please follow up with the lead.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        80
+      ],
+      "id": "b3ac5c5f-84ba-446a-9eb5-43039fb8b5ac",
+      "name": "Send a message1",
+      "webhookId": "WEBHOOK_ID_REDACTED",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CREDENTIAL_ID_REDACTED",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "INSTANCE_ID_REDACTED"
+  }
+}
