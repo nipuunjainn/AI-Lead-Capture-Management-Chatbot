@@ -294,7 +294,12 @@ The following enhancements are planned or possible extensions (not yet implement
 ### Chatbot Interaction — Lead Collection
 ![Chatbot Conversation](screenshots/chatbot.png)
 
-*The AI chatbot progressively collecting lead information from a user.*
+*The AI chatbot progressively collecting lead information — starting with service, then requesting name.*
+
+### Chatbot Interaction — Lead Captured
+![Chatbot Completion](screenshots/chatbot-completion.png)
+
+*The chatbot completing the lead capture after all four fields are collected, confirming the details to the user.*
 
 ---
 
